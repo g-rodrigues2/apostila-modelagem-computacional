@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modelagem Matemática com Apoio Computacional em Python</title>
+<style>
+  :root { --accent:#2c6e8f; --ink:#1c2733; --muted:#5b6b7a; --bg:#f6f8fa; --card:#fff; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+         color:var(--ink); background:var(--bg); line-height:1.6; }
+  header { background:linear-gradient(135deg,#2c6e8f,#1d4e66); color:#fff; padding:64px 24px 56px; }
+  .wrap { max-width:860px; margin:0 auto; padding:0 24px; }
+  header h1 { margin:0 0 12px; font-size:2rem; font-weight:700; }
+  header p { margin:0; font-size:1.1rem; opacity:.92; }
+  main { padding:40px 0 64px; }
+  .lead { color:var(--muted); font-size:1.05rem; margin:0 0 32px; }
+  .cards { display:grid; gap:20px; grid-template-columns:1fr; }
+  @media (min-width:680px){ .cards { grid-template-columns:1fr 1fr; } }
+  .card { background:var(--card); border:1px solid #e3e8ee; border-radius:14px; padding:26px 24px;
+          text-decoration:none; color:inherit; transition:transform .12s ease, box-shadow .12s ease;
+          display:flex; flex-direction:column; }
+  .card:hover { transform:translateY(-3px); box-shadow:0 10px 26px rgba(20,50,80,.12); border-color:#cdd8e2; }
+  .tag { font-size:.78rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+         color:var(--accent); margin-bottom:8px; }
+  .card h2 { margin:0 0 10px; font-size:1.25rem; }
+  .card p { margin:0 0 16px; color:var(--muted); font-size:.97rem; flex:1; }
+  .card .go { font-weight:600; color:var(--accent); }
+  section.about { margin-top:44px; }
+  section.about h3 { font-size:1.05rem; margin:0 0 8px; }
+  section.about ul { color:var(--muted); padding-left:20px; margin:0 0 20px; }
+  footer { color:var(--muted); font-size:.9rem; border-top:1px solid #e3e8ee; padding:24px 0 48px; }
+  code { background:#eef2f6; padding:2px 6px; border-radius:5px; font-size:.92em; }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>Modelagem Matemática com Apoio Computacional</h1>
+    <p>Uma apostila prática de equações diferenciais e ajuste de modelos em Python, para a graduação.</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <p class="lead">
+    Material didático que constrói, do zero, a modelagem de fenômenos que mudam com o tempo —
+    da intuição matemática à simulação computacional, com aplicações em biologia, bioprocessos e
+    biotecnologia. Cada capítulo traz teoria, exemplos resolvidos no papel e código comentado em Python.
+  </p>
+
+  <div class="cards">
+    <a class="card" href="capitulo-1.html">
+      <span class="tag">Capítulo 1</span>
+      <h2>Equações Diferenciais Ordinárias</h2>
+      <p>Crescimento exponencial e logístico, decaimento, equilíbrios e estabilidade, sistemas de EDOs
+         (presa-predador) e aplicações em bioprocessos (Monod) e cinética enzimática (Michaelis-Menten),
+         resolvidos com <code>solve_ivp</code>.</p>
+      <span class="go">Abrir capítulo &rarr;</span>
+    </a>
+
+    <a class="card" href="capitulo-2.html">
+      <span class="tag">Capítulo 2</span>
+      <h2>Ajuste de Modelos a Dados</h2>
+      <p>Método dos mínimos quadrados, regressão linear, R² e resíduos, linearização, ajuste não linear
+         com <code>curve_fit</code> e calibração de uma EDO a dados com <code>least_squares</code>.
+         Termina com a ponte para a máxima verossimilhança.</p>
+      <span class="go">Abrir capítulo &rarr;</span>
+    </a>
+  </div>
+
+  <section class="about">
+    <h3>Como usar</h3>
+    <ul>
+      <li>Leia online clicando nos capítulos acima, ou</li>
+      <li>baixe os notebooks <code>.ipynb</code> do repositório e execute as células no Jupyter / Google Colab.</li>
+    </ul>
+    <h3>Em breve</h3>
+    <ul>
+      <li><strong>Capítulo 3</strong> — Calibração bayesiana e seleção de modelos.</li>
+    </ul>
+  </section>
+
+  <footer>
+    Construído com Python, NumPy, SciPy e Matplotlib. Conteúdo livre para uso educacional.
+  </footer>
+</main>
+</body>
+</html>

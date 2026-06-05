@@ -1,0 +1,15 @@
+# Backups e arquivos temporários
+*copy*.ipynb
+_build_*.py
+_dump*.txt
+
+# Python / Jupyter
+__pycache__/
+.ipynb_checkpoints/
+*.pyc
+.venv/
+venv/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
