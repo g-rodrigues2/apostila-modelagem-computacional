@@ -8090,13 +8090,7 @@ $$</p>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>R^2  = 0.9162</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>
+<pre>R^2  = 0.9162
 RMSE = 0.8370
 </pre>
 </div>
@@ -8322,7 +8316,93 @@ N0 =  24.803  ±  3.033
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="O-que-significam-os-%22%C2%B1%22">O que significam os "±"<a class="anchor-link" href="#O-que-significam-os-%22%C2%B1%22">¶</a></h3><p>A raiz dos elementos da diagonal da matriz de covariância dá o <strong>desvio-padrão</strong> estimado de cada parâmetro. Ele responde à pergunta: <em>se eu repetisse o experimento, quanto este parâmetro tenderia a variar?</em> Uma incerteza pequena indica que os dados "fixam" bem aquele parâmetro; uma incerteza grande indica que muitos valores diferentes ajustariam quase igualmente bem — um aviso importante, que vamos reencontrar como <strong>identificabilidade</strong>.</p>
+<h3 id="A-matriz-de-covari%C3%A2ncia-e-a-incerteza-dos-par%C3%A2metros">A matriz de covariância e a incerteza dos parâmetros<a class="anchor-link" href="#A-matriz-de-covari%C3%A2ncia-e-a-incerteza-dos-par%C3%A2metros">¶</a></h3><p>Quando a <code>curve_fit</code> devolve <code>pcov</code>, ela está entregando a <strong>matriz de covariância</strong> dos parâmetros estimados — uma forma compacta de dizer <em>quanta incerteza</em> há em cada parâmetro e <em>o quanto eles estão amarrados entre si</em>.</p>
+<p>Para um modelo com $p$ parâmetros $\theta = (\theta_1,\dots,\theta_p)$, a matriz de covariância $C$ é $p\times p$:</p>
+<p>$$
+C =
+\begin{pmatrix}
+\operatorname{Var}(\theta_1) &amp; \operatorname{Cov}(\theta_1,\theta_2) &amp; \cdots &amp; \operatorname{Cov}(\theta_1,\theta_p)\
+\operatorname{Cov}(\theta_2,\theta_1) &amp; \operatorname{Var}(\theta_2) &amp; \cdots &amp; \operatorname{Cov}(\theta_2,\theta_p)\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots\
+\operatorname{Cov}(\theta_p,\theta_1) &amp; \operatorname{Cov}(\theta_p,\theta_2) &amp; \cdots &amp; \operatorname{Var}(\theta_p)
+\end{pmatrix}.
+$$</p>
+<p>Como ler essa matriz:</p>
+<ul>
+<li><strong>na diagonal</strong> ficam as <strong>variâncias</strong>, $C_{ii}=\operatorname{Var}(\theta_i)$: o quanto cada parâmetro tende a oscilar se repetíssemos o experimento;</li>
+<li><strong>fora da diagonal</strong> ficam as <strong>covariâncias</strong>, $C_{ij}=\operatorname{Cov}(\theta_i,\theta_j)$: se dois parâmetros variam juntos (um compensando o outro no ajuste);</li>
+<li>ela é <strong>simétrica</strong>, pois $C_{ij}=C_{ji}$.</li>
+</ul>
+<p><strong>De onde ela vem.</strong> No ajuste por mínimos quadrados, $C$ é estimada a partir da <em>sensibilidade</em> do modelo aos parâmetros — a matriz jacobiana $J$, cujas colunas dizem quanto a curva muda quando mexemos em cada parâmetro — e do tamanho do ruído $\hat{\sigma}^2$, estimado pelos próprios resíduos:</p>
+<p>$$
+C \approx \hat{\sigma}^2\,\bigl(J^{\top}J\bigr)^{-1},
+\qquad
+\hat{\sigma}^2 = \frac{1}{n-p}\sum_{i=1}^{n} e_i^{\,2}.
+$$</p>
+<p>A intuição: se a curva é <strong>muito sensível</strong> a um parâmetro, os dados o "prendem" bem e a variância fica pequena; se a curva quase não muda quando ele varia, o parâmetro fica mal determinado e a variância dispara.</p>
+<p><strong>Como sai o desvio-padrão.</strong> O desvio-padrão de cada parâmetro é simplesmente a <strong>raiz quadrada da sua variância</strong> — ou seja, a raiz dos elementos da diagonal:</p>
+<p>$$
+\sigma_{\theta_i} = \sqrt{C_{ii}}.
+$$</p>
+<p>É exatamente o que a linha <code>perr = np.sqrt(np.diag(pcov))</code> faz: <code>np.diag(pcov)</code> extrai a diagonal (as variâncias) e <code>np.sqrt</code> tira a raiz. Reportamos, então, cada parâmetro como $\hat{\theta}_i \pm \sigma_{\theta_i}$.</p>
+<p><strong>Correlação entre parâmetros.</strong> Normalizando a covariância pelos desvios obtemos a <strong>correlação</strong></p>
+<p>$$
+\rho_{ij} = \frac{C_{ij}}{\sigma_{\theta_i}\,\sigma_{\theta_j}}, \qquad -1 \le \rho_{ij} \le 1.
+$$</p>
+<p>Valores próximos de $\pm 1$ são um alerta de <strong>identificabilidade</strong>: os dados não conseguem separar bem aqueles dois parâmetros, porque um compensa o efeito do outro. A célula abaixo mostra tudo isso de forma concreta.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=cell-cov-demo">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># A matriz de covariancia devolvida pela curve_fit</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Matriz de covariância (pcov):"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pcov</span><span class="p">)</span>
+
+<span class="c1"># Desvio-padrao = raiz da diagonal (as variancias)</span>
+<span class="n">desvios</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">pcov</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Desvios-padrão (raiz da diagonal):"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">nome</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s2">"r "</span><span class="p">,</span> <span class="s2">"K "</span><span class="p">,</span> <span class="s2">"N0"</span><span class="p">],</span> <span class="n">desvios</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  sigma_</span><span class="si">{</span><span class="n">nome</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">s</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># Matriz de correlacao: covariancia normalizada pelos desvios</span>
+<span class="n">correlacao</span> <span class="o">=</span> <span class="n">pcov</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">desvios</span><span class="p">,</span> <span class="n">desvios</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Matriz de correlação (diagonal = 1):"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">correlacao</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Matriz de covariância (pcov):
+[[ 8.85074850e-04 -1.85698802e-02 -7.98021393e-02]
+ [-1.85698802e-02  3.06650880e+00  1.12449846e+00]
+ [-7.98021393e-02  1.12449846e+00  9.19941767e+00]]
+
+Desvios-padrão (raiz da diagonal):
+  sigma_r  = 0.0298
+  sigma_K  = 1.7511
+  sigma_N0 = 3.0331
+
+Matriz de correlação (diagonal = 1):
+[[ 1.    -0.356 -0.884]
+ [-0.356  1.     0.212]
+ [-0.884  0.212  1.   ]]
+</pre>
+</div>
 </div>
 </div>
 </div>
@@ -8342,7 +8422,7 @@ N0 =  24.803  ±  3.033
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Como o ajuste "enxerga" um parametro: varremos r e medimos o erro (SQR)</span>
@@ -8397,7 +8477,7 @@ N0 =  24.803  ±  3.033
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">modelo_logistico</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">K</span><span class="p">):</span>
