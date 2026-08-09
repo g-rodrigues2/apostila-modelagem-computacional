@@ -15,8 +15,6 @@ As páginas estão publicadas via GitHub Pages:
 - **Capítulo 2 — Ajuste de Modelos a Dados** → [`docs/capitulo-2.html`](docs/capitulo-2.html)
 - **Capítulo 3 — Calibração Bayesiana e Seleção de Modelos** → [`docs/capitulo-3.html`](docs/capitulo-3.html)
 
-> Depois de ativar o GitHub Pages, o endereço será algo como
-> `https://<seu-usuario>.github.io/<nome-do-repo>/`.
 
 ## 📓 Notebooks
 
