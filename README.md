@@ -11,9 +11,9 @@ usando NumPy, SciPy e Matplotlib.
 
 As páginas estão publicadas via GitHub Pages:
 
-- **Capítulo 1 — Equações Diferenciais Ordinárias** → [`docs/capitulo-1.html`](docs/capitulo-1.html)
-- **Capítulo 2 — Ajuste de Modelos a Dados** → [`docs/capitulo-2.html`](docs/capitulo-2.html)
-- **Capítulo 3 — Calibração Bayesiana e Seleção de Modelos** → [`docs/capitulo-3.html`](docs/capitulo-3.html)
+- **Capítulo 1 — Equações Diferenciais Ordinárias** → [`docs/capitulo-1.html`]( -https://g-rodrigues2.github.io/apostila-modelagem-computacional/capitulo-1.html)
+- **Capítulo 2 — Ajuste de Modelos a Dados** → [`docs/capitulo-2.html`](https://g-rodrigues2.github.io/apostila-modelagem-computacional/capitulo-2.html)
+- **Capítulo 3 — Calibração Bayesiana e Seleção de Modelos** → [`docs/capitulo-3.html`](https://g-rodrigues2.github.io/apostila-modelagem-computacional/capitulo-3.html)
 
 
 ## 📓 Notebooks
